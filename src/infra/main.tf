@@ -23,6 +23,11 @@ resource "kubernetes_deployment" "app" {
         labels = {
           app = "mi-app"
         }
+        annotations = {
+          "prometheus.io/scrape" = "true"
+          "prometheus.io/port"   = "8080"
+          "prometheus.io/path"   = "/actuator/prometheus"
+        }
       }
 
       spec {
@@ -31,6 +36,7 @@ resource "kubernetes_deployment" "app" {
           image = var.image
           port {
             container_port = 8080
+            name          = "metrics"
           }
         }
       }
